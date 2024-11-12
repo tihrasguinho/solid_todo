@@ -1,0 +1,24 @@
+import 'package:solid_todo/src/common/presentation/others/exceptions.dart';
+import 'package:solid_todo/src/common/presentation/others/result.dart';
+import 'package:solid_todo/src/features/todos/domain/entities/todo_entity.dart';
+import 'package:solid_todo/src/features/todos/domain/repositories/todos_repository.dart';
+import 'package:solid_todo/src/features/todos/domain/usecases/create_one_todo/create_one_todo_usecase.dart';
+
+class CreateOneTodoUsecaseImp implements CreateOneTodoUsecase {
+  final TodosRepository repository;
+
+  const CreateOneTodoUsecaseImp(this.repository);
+
+  @override
+  AsyncResult<TodosException, TodoEntity> call(CreateOneTodoParams params) async {
+    if (params.title.isEmpty) {
+      return const Left(UsecaseException('Title is empty!'));
+    }
+
+    if (params.subtitle != null && params.subtitle?.isEmpty == true) {
+      return const Left(UsecaseException('Subtitle is empty!'));
+    }
+
+    return repository.createOneTodo(params);
+  }
+}
